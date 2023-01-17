@@ -3,14 +3,27 @@
 if __name__ == '__main__' :
 	print('这是basic程序，不是启动程序')
 
-import cv2,pyautogui,time
+import cv2,pyautogui,time,os
 from paddleocr import PaddleOCR, draw_ocr
 from setting import *
 
-ocr = PaddleOCR(use_angle_cls=False, lang="ch")
-print('OCR初始化完成')
+log_list = os.listdir(path='./logs')
+log_list.sort(reverse = True)
+print(log_list)
 
-def log_write(str = '',aim = './logs/dlog.txt',mode = 'a',code = 'utf-8') :
+if len(log_list) > 6 :
+
+    for i in log_list[6:len(log_list)] :
+        os.remove(f'./logs/{i}')
+
+log_time = time.strftime("%Y-%m-%d %H_%M_%S",time.localtime())
+log = open(f'./logs/{log_time}.txt','w',encoding = 'utf-8')
+log.write(time.strftime("%Y-%m-%d %H_%M_%S",time.localtime()),'开始运行')
+log.close()
+del log
+
+
+def log_write(str = '',aim = f'./logs/{log_time}.txt',mode = 'a',code = 'utf-8') :
 	"""
 		将指定的字符按指定的模式写入指定文件
 		aim:str类型，文件名或'./logs/log.txt'
@@ -25,14 +38,18 @@ def log_write(str = '',aim = './logs/dlog.txt',mode = 'a',code = 'utf-8') :
 	log.close()
 	return#log_write
 
-def get_screen(shot_change = None,save_location = './imgs/screenshot.png')	:
+def get_screen(shot_change = None,mode = 0,save_location = './imgs/screenshot.png')	:
 	"""
 		截取屏幕
 		shot_change:tuple类型，偏移的坐标，(x坐标，y坐标，x轴长度，y轴长度)
 		save_location:str类型，截图保存的地址
 		return:None
 	"""
-	pyautogui.screenshot(region = shot_change).save(save_location)
+	if mode == 0 :
+		pyautogui.screenshot(region = shot_change).save(save_location)
+	elif mode == 1 :
+		pass
+
 	return#get_screen
 
 def click_change(clickpoint,changex = 0,changey = 0,sleep = 1)	:
@@ -42,9 +59,7 @@ def click_change(clickpoint,changex = 0,changey = 0,sleep = 1)	:
 		x,y:int类型，xy坐标的偏移量
 		return:None
 	"""
-	clickx = clickpoint[0]
-	clicky = clickpoint[1]
-	pyautogui.click(clickx + changex,clicky + changey,button='left')
+	pyautogui.click(clickpoint[0] + changex,clickpoint[1] + changey,button='left')
 	time.sleep(sleep)
 	return#click_change
 
@@ -88,7 +103,6 @@ def find_object(aim,location = './imgs/screenshot.png') :
 		location：str类型，图片地址，相对地址和绝对地址均可
 		return:tuple类型,为目标的xy坐标
 	"""
-	ocr = PaddleOCR(use_angle_cls=True, lang="ch")  #不能使用多线程
 	result = ocr.ocr(location, cls=True)
 	
 	for line in result:
@@ -99,7 +113,7 @@ def find_object(aim,location = './imgs/screenshot.png') :
 			find_check = 1
 			left_up = line[0][0]
 			right_down = line[0][2]
-			aim_location = ((left_up[0] + right_down[0]) / 2,(left_up[1] + right_down[1]) / 2)
+			aim_location = ((line[0][0][0] + line[0][2][0]) / 2,(line[0][0][1] + line[0][2][1]) / 2)
 			print('找到',line[1][0],aim_location)
 			log_write('找到 '+str(aim)+' '+str(aim_location))
 
@@ -168,3 +182,7 @@ def get_mouse_location():
 	mousey = int(mouse_location[locationd + 4:locationk])
 	# print(mouse_location)
 	return (mousex,mousey)#get_mouse_location
+
+ocr = PaddleOCR(use_angle_cls=False, lang="ch")
+print('OCR初始化完成')
+log_write('OCR初始化完成')

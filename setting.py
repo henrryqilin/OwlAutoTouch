@@ -1,4 +1,4 @@
 #coding=utf-8
 
-#cv2÷√–≈∂»
+#cv2ÁΩÆ‰ø°Â∫¶
 treshold = 0.85

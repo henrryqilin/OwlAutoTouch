@@ -1,6 +1,5 @@
 
- # Owl Auto Azur Lane
-碧蓝航线自动挂机脚本，在很长的一段时间内会一直处于开发阶段。~~(指当鸽子)~~
+
 
 ## 目录
 - [安装说明](#01)
@@ -11,10 +10,16 @@
 ## 安装说明
 
 ### 1、安装[python](https://www.python.org/)环境（自己找教程叭）
-- 推荐3.7
+- 推荐3.7.8
 
 ### 2、安装[PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
-
+CPU用户
+- 使用这行代码
+```
+	pip install paddlepaddle==2.3.2 -i https://pypi.tuna.tsinghua.edu.cn/simple
+```
+GPU用户（需要自行安装**CUDA**和**CUDNN**）
+- 请根据自己的GPU情况使用[PaddleOCR的官方安装文档](https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/pip/windows-pip.html)
 
 ### 3、安装其他依赖
 ```
@@ -25,7 +30,7 @@
 <a name='02'></a>
 ## 使用说明
 
-### 还不知道咋写
+### 还没写完
 
 <a name=03></a>
 ## 开源库
