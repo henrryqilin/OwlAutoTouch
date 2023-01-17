@@ -7,7 +7,7 @@ import cv2,pyautogui,time,os
 from paddleocr import PaddleOCR, draw_ocr
 from setting import *
 
-log_list = os.listdir(path='./logs')
+log_list = os.listdir(path='./logs')#整理logs文件夹中的日志文件
 log_list.sort(reverse = True)
 print(log_list)
 
@@ -16,7 +16,7 @@ if len(log_list) > 6 :
     for i in log_list[6:len(log_list)] :
         os.remove(f'./logs/{i}')
 
-log_time = time.strftime("%Y-%m-%d %H_%M_%S",time.localtime())
+log_time = time.strftime("%Y-%m-%d %H_%M_%S",time.localtime())#创建本次运行日志文件
 log = open(f'./logs/{log_time}.txt','w',encoding = 'utf-8')
 log.write(time.strftime("%Y-%m-%d %H_%M_%S",time.localtime()),'开始运行')
 log.close()
@@ -183,6 +183,6 @@ def get_mouse_location():
 	# print(mouse_location)
 	return (mousex,mousey)#get_mouse_location
 
-ocr = PaddleOCR(use_angle_cls=False, lang="ch")
+ocr = PaddleOCR(use_angle_cls=False, lang="ch")#加载OCR资源
 print('OCR初始化完成')
 log_write('OCR初始化完成')
