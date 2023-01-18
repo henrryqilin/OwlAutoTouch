@@ -4,3 +4,4 @@ from basic import get_screen,click_change,ocr_result,ocr_extract,find_object,get
 from setting import *
 import time,os
 
+get_screen()

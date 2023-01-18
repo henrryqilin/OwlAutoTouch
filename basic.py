@@ -16,9 +16,9 @@ if len(log_list) > 6 :
     for i in log_list[6:len(log_list)] :
         os.remove(f'./logs/{i}')
 
-log_time = time.strftime("%Y-%m-%d %H_%M_%S",time.localtime())#创建本次运行日志文件
+log_time = time.strftime("%Y-%m-%d %H.%M.%S",time.localtime())#创建本次运行日志文件
 log = open(f'./logs/{log_time}.txt','w',encoding = 'utf-8')
-log.write(time.strftime("%Y-%m-%d %H_%M_%S",time.localtime()),'开始运行')
+log.write(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())+' 开始运行\n')
 log.close()
 del log
 
@@ -38,7 +38,7 @@ def log_write(str = '',aim = f'./logs/{log_time}.txt',mode = 'a',code = 'utf-8')
 	log.close()
 	return#log_write
 
-def get_screen(shot_change = None,mode = 0,save_location = './imgs/screenshot.png')	:
+def get_screen(shot_change = None,mode = connect_mode,save_location = './imgs/screenshot.png',aim = connect_aim)	:
 	"""
 		截取屏幕
 		shot_change:tuple类型，偏移的坐标，(x坐标，y坐标，x轴长度，y轴长度)
@@ -47,19 +47,26 @@ def get_screen(shot_change = None,mode = 0,save_location = './imgs/screenshot.pn
 	"""
 	if mode == 0 :
 		pyautogui.screenshot(region = shot_change).save(save_location)
-	elif mode == 1 :
-		pass
+	else :
+		os.system(f'adb -s {aim} shell screencap -p /sdcard/screenshot.png')
+		os.system(f'adb -s {aim} pull sdcard/screenshot.png ./imgs')
 
 	return#get_screen
 
-def click_change(clickpoint,changex = 0,changey = 0,sleep = 1)	:
+def click_change(clickpoint,changex = 0,changey = 0,sleep = 1,mode = connect_mode,aim = connect_aim)	:
 	"""
 		输入一个元组，左键点击给定的位置，可偏移
 		clickpoint:tuple类型，点击的xy坐标
 		x,y:int类型，xy坐标的偏移量
 		return:None
 	"""
-	pyautogui.click(clickpoint[0] + changex,clickpoint[1] + changey,button='left')
+	if mode  == 0 :
+		pyautogui.click(clickpoint[0] + changex,clickpoint[1] + changey,button='left')
+	else :
+		x = clickpoint[0] + changex
+		y = clickpoint[0] + changey
+		os.system(f'adb -s {aim} shell input touchscreen tap {x} {y}')
+
 	time.sleep(sleep)
 	return#click_change
 
