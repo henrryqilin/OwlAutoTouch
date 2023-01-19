@@ -1,1 +1,7 @@
 .vs
+test.py
+/img/develop
+/examples/Arknight
+/eaxmples/AzurLane
+/logs/9logs
+/logs/*_*_* *.*.*.txt

@@ -8,4 +8,3 @@ if adb_test() :
     print('连接成功')
 else :
     print('adb连接失败,可能是端口设置原因')
-    assert 9 > 10
