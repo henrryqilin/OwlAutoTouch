@@ -198,13 +198,16 @@ def get_mouse_location():
 
 def adb_test() :
 	if connect_mode == 1 :
-		if f'{connect_aim}' in os.popen(f'adb connect {connect_aim}').read()  :
-			return True
-		else :
+		try :
+			message = os.popen(f'adb connect {connect_aim}').read()
+			print(message)
+			if f'already connected to {connect_aim}' in message :
+				return True
+		except UnicodeDecodeError :
 			return False
 	else :
 		return True
 
-ocr = PaddleOCR(use_angle_cls=False, lang="ch")#加载OCR资源
-print('OCR初始化完成')
-log_write('OCR初始化完成')
+# ocr = PaddleOCR(use_angle_cls=False, lang="ch")#加载OCR资源
+# print('OCR初始化完成')
+# log_write('OCR初始化完成')
