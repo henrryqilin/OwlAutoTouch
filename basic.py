@@ -7,23 +7,26 @@ import cv2,pyautogui,time,os
 from paddleocr import PaddleOCR, draw_ocr
 from setting import *
 
-log_list = os.listdir(path='./logs')#整理logs文件夹中的日志文件
-log_list.sort(reverse = True)
-print(log_list)
+def log_organize():
+	log_list = os.listdir(path='./logs')#整理logs文件夹中的日志文件
+	log_list.sort(reverse = True)
+	# print(log_list)
 
-if len(log_list) > 6 :
+	if len(log_list) > logs_quantity :
 
-    for i in log_list[6:len(log_list)] :
-        os.remove(f'./logs/{i}')
+		for i in log_list[logs_quantity:len(log_list)] :
+			os.remove(f'./logs/{i}')
 
-log_time = time.strftime("%Y-%m-%d %H.%M.%S",time.localtime())#创建本次运行日志文件
-log = open(f'./logs/{log_time}.txt','w',encoding = 'utf-8')
-log.write(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())+' 开始运行\n')
-log.close()
-del log
+	log_time = time.strftime("%Y-%m-%d %H.%M.%S",time.localtime())#创建本次运行日志文件
+	log = open(f'./logs/{log_time}.txt','w',encoding = 'utf-8')
+	log.write(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())+' 开始运行\n')
+	log.close()
+	del log
+	return log_time
 
+log_name=log_organize()
 
-def log_write(str = '',aim = f'./logs/{log_time}.txt',mode = 'a',code = 'utf-8') :
+def log_write(str = '',aim = f'./logs/{log_name}.txt',mode = 'a',code = 'utf-8') :
 	"""
 		将指定的字符按指定的模式写入指定文件
 		aim:str类型,文件名或'./logs/log.txt'
@@ -55,7 +58,7 @@ def get_screen(shot_change = None,mode = connect_mode,save_location = './imgs/sc
 
 	return#get_screen
 
-def click_change(clickpoint,changex = 0,changey = 0,sleep = 1,mode = connect_mode,aim = connect_aim)	:
+def click_change(clickpoint,changex = 0,changey = 0,mode = connect_mode,aim = connect_aim)	:
 	"""
 		输入一个元组,左键点击给定的位置,可偏移
 		clickpoint:tuple类型,点击的xy坐标
@@ -66,19 +69,18 @@ def click_change(clickpoint,changex = 0,changey = 0,sleep = 1,mode = connect_mod
 		pyautogui.click(clickpoint[0] + changex,clickpoint[1] + changey,button='left')
 	else :
 		x = clickpoint[0] + changex
-		y = clickpoint[0] + changey
-		os.system(f'adb -s {aim} shell input touchscreen tap {x} {y}')
+		y = clickpoint[1] + changey
+		os.system(f'adb -s {aim} shell input touchscreen tap {x} {y}')#input touchscreen tap  	adb shell input keyevent 4 返回
 
-	time.sleep(sleep)
 	return#click_change
 
-def ocr_result(location = './imgs/screenshot.png') :
+def ocr_result(img_path = './imgs/screenshot.png') :
 	"""
 		显示图片中所有识别到的结果
-		location:str类型,图片地址(相对地址和绝对地址均可)
+		img_path:str类型,图片地址(相对地址和绝对地址均可)
 		return:list类型,包含paddleOCR返回的所有结果
 	"""
-	result = ocr.ocr(location, cls=True)
+	result = ocr.ocr(img_path, cls=True)
 	all_menmber = []
 	
 	for line in result:
@@ -89,13 +91,13 @@ def ocr_result(location = './imgs/screenshot.png') :
 	log_write('OCR结果为'+str(all_menmber)+'\n')
 	return result#ocr_result
 
-def ocr_extract(location = './imgs/screenshot.png') :
+def ocr_extract(img_path = './imgs/screenshot.png') :
 	"""
 		将OCR识别的结果提取出来
 		result:list类型,ocr_result识别的结果
 		return:list类型,
 	"""
-	result = ocr.ocr(location, cls=True)
+	result = ocr.ocr(img_path, cls=True)
 	all_menmber = []
 	
 	for line in result:
@@ -105,14 +107,14 @@ def ocr_extract(location = './imgs/screenshot.png') :
 	log_write('OCR结果为'+str(all_menmber))
 	return all_menmber#ocr_extract
 
-def find_object(aim,location = './imgs/screenshot.png') :
+def find_object(aim,img_path = './imgs/screenshot.png',touch=False) :
 	"""
 		基于paddleOCR,找到目标的坐标
 		aim:str类型,目标的名称
-		location:str类型,图片地址,相对地址和绝对地址均可
+		img_path:str类型,图片地址,相对地址和绝对地址均可
 		return:tuple类型,为目标的xy坐标
 	"""
-	result = ocr.ocr(location, cls=True)
+	result = ocr.ocr(img_path, cls=True)
 	
 	for line in result:
 		find_check = 0
@@ -122,60 +124,49 @@ def find_object(aim,location = './imgs/screenshot.png') :
 			find_check = 1
 			aim_location = ((line[0][0][0] + line[0][2][0]) / 2,(line[0][0][1] + line[0][2][1]) / 2)
 			print('找到',line[1][0],aim_location)
-			log_write('找到 '+str(aim)+' '+str(aim_location))
+			log_write('找到 '+aim+' '+str(aim_location))
 
 	if find_check == 0 :
-		print('寄,找不到了捏')
+		return [False,(1,1)]
 
-		assert 9 > 10
+	if touch == True :
+		click_change(aim_location)
 
-	return aim_location#find_object
+	return [True,aim_location]#find_object
 
-def get_xy(img_model_path,img_path = "./imgs/screenshot.png",mode = 0):
+def get_xy(img_model_path,img_path = "./imgs/screenshot.png",touch = False,mode=0):
 	"""
 	    用来判定游戏画面的点击坐标
-	    img_model_path:用来检测的图片
+	    img_model_path:用来检测的图片的文件名
+	    touch:bool类型,是否点击
+	    mode:int类型,0为返回图片中间坐标,1为返回左上角坐标,2为返回右下角坐标
 	    return:tuple类型,返回检测到的区域中心的坐标
 	"""
 	img = cv2.imread(img_path)	# 待读取图像
-	img_terminal = cv2.imread(img_model_path)	# 图像模板
+	img_terminal = cv2.imread(f'./imgs/models/{img_model_path}.png')	# 图像模板
 	height, width, channel = img_terminal.shape	# 读取模板的高度宽度和通道数
-	result = cv2.matchTemplate(img, img_terminal, cv2.TM_CCOEFF_NORMED)	# 使用matchTemplate进行模板匹配（标准平方差匹配）
+	result = cv2.matchTemplate(img, img_terminal, cv2.TM_CCOEFF_NORMED)	# 使用matchTemplate进行模板匹配
 	result_matrix = cv2.minMaxLoc(result)# 解析出匹配区域的左上角图标,最小值在前最大值在后
-	print('首次匹配',result_matrix[1])
-	log_write('首次匹配'+str(result_matrix[1]))
+	print('精度:',result_matrix[1])
+	log_write('精度'+str(result_matrix[1]))
+
 	if result_matrix[1] < treshold :
-		i = 3
-		
-		while result_matrix[1] < treshold and i > 0 :
-			time.sleep(1)
-			get_screen()
-			img = cv2.imread("./imgs/screenshot.png")	# 待读取图像
-			img_terminal = cv2.imread(img_model_path)	# 图像模板
-			height, width, channel = img_terminal.shape	# 读取模板的高度宽度和通道数
-			result = cv2.matchTemplate(img, img_terminal, cv2.TM_CCOEFF_NORMED)	# 使用matchTemplate进行模板匹配（标准平方差匹配）
-			result_matrix = cv2.minMaxLoc(result)# 解析出匹配区域的左上角图标,最小值在前最大值在后
-			print('二次匹配',result_matrix[1])
-			log_write('二次匹配'+str(result_matrix[1]))
-			i -= 1
-	
-	print('最终精度:',result_matrix[1])
-	log_write('最终精度'+str(result_matrix[1]))
-	if result_matrix[1] < treshold :
-		print('寄,找不到了捏')
-		if mode == 1 :
-			return [False,(1,1)]
-		else :
-			return (1,1)
+		return [False,(1,1)]
 
 	upper_left = result_matrix[3]	
 	lower_right = (upper_left[0] + width, upper_left[1] + height)
 	avg = (int((upper_left[0] + lower_right[0]) / 2), int((upper_left[1] + lower_right[1]) / 2))	
 	# 计算坐标的平均值并将其返回
-	if mode == 1 :
+	
+	if touch == True :
+		click_change(avg)
+	
+	if mode == 0:
 		return [True,avg]
-	else :
-		return avg#get_xy
+	elif mode == 1:
+		return [True,upper_left]
+	elif mode == 2:
+		return [True,lower_right]#get_xy
 
 def move_to(location) :
 	pyautogui.moveTo(location[0],location[1],duration = 0.3)
@@ -193,14 +184,14 @@ def get_mouse_location():
 	mousex = mousey = 0
 	mousex = int(mouse_location[8:locationd])
 	mousey = int(mouse_location[locationd + 4:locationk])
-	# print(mouse_location)
+	print(mouse_location)
 	return (mousex,mousey)#get_mouse_location
 
 def adb_test() :
 	if connect_mode == 1 :
 		try :
 			message = os.popen(f'adb connect {connect_aim}').read()
-			print(message)
+			# print(message)
 			if f'already connected to {connect_aim}' in message :
 				return True
 		except UnicodeDecodeError :
@@ -208,6 +199,13 @@ def adb_test() :
 	else :
 		return True
 
-# ocr = PaddleOCR(use_angle_cls=False, lang="ch")#加载OCR资源
-# print('OCR初始化完成')
-# log_write('OCR初始化完成')
+if __name__ == 'main':
+	try:
+		if ocr_load == True:
+			ocr = PaddleOCR(use_angle_cls=False, lang="ch")#加载OCR资源
+			print('OCR初始化完成')
+			log_write('OCR初始化完成')
+	except IndentationError:
+		ocr = PaddleOCR(use_angle_cls=False, lang="ch")#加载OCR资源
+		print('OCR初始化完成')
+		log_write('OCR初始化完成')
