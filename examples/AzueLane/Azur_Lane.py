@@ -4,7 +4,7 @@ if __name__ == '__main__' :
 	print('这是主程序，不是启动程序')
 
 import time
-from dbasic import get_screen,click_change,ocr_result,ocr_extract,find_object,get_xy,log_write
+from basic import get_screen,click_change,ocr_result,ocr_extract,find_object,get_xy,log_write
 from paddleocr import PaddleOCR
 from setting import *
 

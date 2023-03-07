@@ -7,5 +7,7 @@ from setting import *
 if adb_test() :
     print('连接成功')
 else :
-    print('adb连接失败,可能是端口设置原因')
-    assert 9 > 10
+    connect_mode = 0
+    print('adb连接失败,请检查地址设置,以是否安装ADB')
+
+get_screen()

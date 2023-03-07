@@ -1,1 +1,7 @@
 .vs
+test.py
+/imgs/develop
+/imgs/ball*.png
+/examples
+/logs/9logs
+/logs/*.*
