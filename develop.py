@@ -1,13 +1,12 @@
 #coding=utf-8
 
+ocr_load=True
+
 import pyautogui
-from basic import get_screen,click_change,ocr_result,ocr_extract,find_object,get_xy,move_to,log_write,get_mouse_location,adb_test
+from basic import get_screen,click_change,ocr_result,ocr_extract,find_object,get_xy,move_to,log_write,get_mouse_location,adb_test,img_recognition,ocr_recognition
 from setting import *
 import time,os,cv2
-ocr_load=False
 
-# ocr_extract('./imgs/develop/screenshot18.png')
-time.sleep(3)
-while True:    
-    pyautogui.click(1844,44,button='left')
-    time.sleep(0.5)
+a=ocr_recognition()#chenyulin
+a.result('./imgs/develop/2023-03-05 20.31.20.png')
+print(a.find('月女的华彩'))
