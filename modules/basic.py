@@ -3,9 +3,8 @@
 import cv2,pyautogui,time,os
 from paddleocr import PaddleOCR
 
-f=open('./modules/setting.json',mode='r',encoding='utf-8')
-setting=eval(f.read())
-f.close()
+with open('./modules/setting.json',mode='r',encoding='utf-8') as f:
+	setting=eval(f.read())
 
 def get_time(func):
 	"""
@@ -52,22 +51,6 @@ def log_write(str = '',aim = f'./logs/{log_name}.txt',mode = 'a',code = 'utf-8')
 	log.write(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())+' '+str+'\n')
 	log.close()
 	return#log_write
-
-def click_change(clickpoint,change=(0,0),mode = setting['basic']['connect_mode'],aim = setting['basic']['connect_aim'])	:
-	"""
-		输入一个元组,左键点击给定的位置,可偏移
-		clickpoint:tuple类型,点击的xy坐标
-		x,y:int类型,xy坐标的偏移量
-		return:None
-	"""
-	if mode  == 0 :
-		pyautogui.click(clickpoint[0] + change[0],clickpoint[1] + change[1],button='left')
-	else :
-		x = clickpoint[0] + change[0]
-		y = clickpoint[1] + change[1]
-		os.system(f'adb -s {aim} shell input touchscreen tap {x} {y}')#input touchscreen tap  	adb shell input keyevent 4 返回
-
-	return#click_change
 
 class ocr_recognition(dict):
 
@@ -270,7 +253,8 @@ class img_recognition(dict):
 class shot_tap():
 
 	def __init__(self,interval=setting['basic']['shot_interval']):
-		self.last=time.time()
+		self.last_shot=time.time()
+		self.shot_time=0
 		self.interval=interval
 	
 	def get_screen(self,shot_change = None,mode = setting['basic']['connect_mode'],save_path = './imgs/',name='screenshot.png',
@@ -282,7 +266,7 @@ class shot_tap():
 			return:None
 		"""
 		while True:
-			if time.time() - self.last > self.interval:
+			if time.time() - self.last_shot > self.interval:
 				break
 			else:
 				time.sleep(0.2)
@@ -292,10 +276,11 @@ class shot_tap():
 		else :
 			os.system(f'adb -s {aim} shell screencap -p /sdcard/{name}')
 			os.system(f'adb -s {aim} pull sdcard/{name} {save_path}')
-		self.last=time.time()
+		self.last_shot=time.time()
+		self.shot_time+=1
 		return#get_screen
 	
-	def click_change(clickpoint,change=(0,0),mode = setting['basic']['connect_mode'],aim = setting['basic']['connect_aim'])	:
+	def click_change(self,clickpoint,change=(0,0),mode = setting['basic']['connect_mode'],aim = setting['basic']['connect_aim'])	:
 		"""
 			输入一个元组,左键点击给定的位置,可偏移
 			clickpoint:tuple类型,点击的xy坐标
@@ -309,6 +294,7 @@ class shot_tap():
 			y = clickpoint[1] + change[1]
 			os.system(f'adb -s {aim} shell input touchscreen tap {x} {y}')#input touchscreen tap  	adb shell input keyevent 4 返回
 
+		self.shot_time=0
 		return#click_change
 
 def move_to(location) :
