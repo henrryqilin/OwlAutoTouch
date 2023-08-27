@@ -1,4 +1,7 @@
 #coding=utf-8
 
 import time
-from setting import *
+import modules.genshen.genshen as genshen
+
+# genshen.master()
+genshen.test()  
