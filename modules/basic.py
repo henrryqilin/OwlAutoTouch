@@ -179,7 +179,7 @@ class img_recognition(dict):
 						# 计算坐标的平均值并将其返回
 							
 						if touch == True :
-							click_change(avg)
+							shot_tap.click_change(avg)
 							
 						if mode == 0:
 							self[i]=(True,avg)
@@ -222,7 +222,7 @@ class img_recognition(dict):
 					return
 					
 				if touch == True :
-					click_change(avg)
+					shot_tap.click_change(avg)
 								
 				if mode == 0:
 					self[img_model]=(True,avg)
@@ -239,7 +239,7 @@ class img_recognition(dict):
 					return
 					
 				if touch == True :
-					click_change(avg)
+					shot_tap.click_change(avg)
 								
 				if mode == 0:
 					self[img_model[0]]=(True,avg)
