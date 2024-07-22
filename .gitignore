@@ -1,7 +1,6 @@
 .vs
 test.py
-/examples
-/logs/*.*
 /modules/outdated
 /Lib/site-packages
 test_notebook.ipynb
+OwlAutoTouch.code-workspace
