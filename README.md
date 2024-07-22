@@ -11,7 +11,7 @@
 ## 安装说明
 
 ### 1、安装[python](https://www.python.org/)环境（自己找教程叭）
-- 推荐3.7.8
+
 
 ### 2、安装[PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 CPU用户

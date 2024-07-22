@@ -1,7 +1,7 @@
 .vs
 test.py
-/imgs/develop
-/imgs/ball*.png
 /examples
-/logs/9logs
 /logs/*.*
+/modules/outdated
+/Lib/site-packages
+test_notebook.ipynb
