@@ -1,5 +1,7 @@
 .vs
+*.pyc
 test.py
+log_*.txt
 /modules/outdated
 /Lib/site-packages
 test_notebook.ipynb
