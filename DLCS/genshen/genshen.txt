@@ -1,1 +1,0 @@
-suit,seat,level,      main_tag      ,   secondary_tag    ,locked,owner

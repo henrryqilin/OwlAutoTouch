@@ -1,8 +1,8 @@
 .vs
 *.pyc
+/DLCS
 test.py
 log_*.txt
+todolist.txt
 /modules/outdated
 /Lib/site-packages
-test_notebook.ipynb
-OwlAutoTouch.code-workspace
