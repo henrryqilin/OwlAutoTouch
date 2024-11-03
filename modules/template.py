@@ -4,11 +4,11 @@ from modules.dec_timer import average_timer,timer
 
 class Template():
 
-    def __init__(self,Template_DIR,Config,Father_scsh,Father_Butt):
-        self.DIR = Template_DIR
-        self.config = Config
-        self.scsh = Father_scsh
-        self.butt = Father_Butt
+    def __init__(self,Config_Input):
+        self.DIR = os.path.join(Config_Input['dir'],'imgs')
+        self.config = Config_Input['config']
+        self.scsh = Config_Input['scsh']
+        self.butt = Config_Input['butt']
 
         self.read_mode = {}
         self.templates = {}
@@ -41,7 +41,7 @@ class Template():
             result = [True,(result[1][0] + up_left[0],result[1][1] + up_left[1])]
         return result
 
-    @average_timer(t = 30)
+    # @average_timer(t = 30)
     def get_xy(self,Template,Image = '',Colour_Mode = 1,Forward_Mode = 0):
         """
         Template:array/str,模版

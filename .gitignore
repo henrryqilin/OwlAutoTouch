@@ -1,6 +1,6 @@
 .vs
 *.pyc
-/DLCS
+/DLCS/*
 test.py
 log_*.txt
 todolist.txt

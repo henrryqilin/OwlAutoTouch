@@ -2,9 +2,9 @@ import os,json,cv2
 
 class Button_Manager():
 
-    def __init__(self,DIR_Address,Father_Config):
-        self.DIR = DIR_Address
-        self.config = Father_Config
+    def __init__(self,Config_Input):
+        self.DIR = Config_Input['dir']
+        self.config = Config_Input['config']
 
         self.available = False
         self.register_list = {}
@@ -22,7 +22,7 @@ class Button_Manager():
             if Name not in self.register_list:
                 with open('{0}'.format(os.path.join(self.DIR,os.path.dirname(Name),'register_list.json')),mode = 'r',encoding = 'utf-8') as f:
                     self.register_list = json.load(f)
-            self.enlarge_parameter = (tuple(self.register_list[Name]['expect']),self.register_list[Name]['zoom'])
+            self.enlarge_parameter = (tuple(self.register_list[Name]['expect']),self.register_list[Name]['zoom'])# 这里叫放大参数其实有点抽象
         except FileNotFoundError:
             self.available = False
             return
@@ -51,12 +51,6 @@ class Button_Manager():
         if self.available:
             self.upper_left = (int(self.enlarge_parameter[0][0] - (self.width * self.enlarge_parameter[1]) / 2),int(self.enlarge_parameter[0][1] - (self.height * self.enlarge_parameter[1]) / 2))
             image = self.img[self.upper_left[1]:int(self.upper_left[1] + self.height * self.enlarge_parameter[1]),self.upper_left[0]:int(self.upper_left[0] + self.width * self.enlarge_parameter[1])]
-            #-----
-            # cv2.namedWindow("image_window", cv2.WINDOW_NORMAL) 
-            # cv2.moveWindow("image_window", 100, 100) 
-            # cv2.imshow("image_window",image)
-            # cv2.waitKey(0)
-            #-----
             return image
         else:# is impossible
             return

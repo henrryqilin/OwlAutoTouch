@@ -5,9 +5,9 @@ from modules.screenshot.pyautogui import Pyautogui
 
 class Screenshot():
 
-    def __init__(self,Save_DIR,Config):
-        self.DIR = Save_DIR
-        self.config = Config
+    def __init__(self,Config_Input):
+        self.DIR = Config_Input['dir']
+        self.config = Config_Input['config']
 
         self.screenshots = {}
         self.last_time = time.time()
