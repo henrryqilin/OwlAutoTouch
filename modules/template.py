@@ -53,9 +53,9 @@ class Template():
             self.templates.clear()
         
         if type(Template) == str:
-            if Template not in self.templates:
-                self.templates[Template] = cv2.imread(os.path.join(self.DIR,'template',Template) + '.png',Colour_Mode)
-            template = self.templates[Template]
+            if Template + f'{Colour_Mode}' not in self.templates:
+                self.templates[Template + f'{Colour_Mode}'] = cv2.imread(os.path.join(self.DIR,'template',Template) + '.png',Colour_Mode)
+            template = self.templates[Template + f'{Colour_Mode}']
             self.butt.tem_input(template,Template)
         else:
             template = Template
