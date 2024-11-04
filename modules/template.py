@@ -1,4 +1,4 @@
-import cv2,os
+import cv2,os,sys
 
 from modules.dec_timer import average_timer,timer
 
@@ -9,6 +9,7 @@ class Template():
         self.config = Config_Input['config']
         self.scsh = Config_Input['scsh']
         self.butt = Config_Input['butt']
+        self.logg = Config_Input['logg'].log
 
         self.read_mode = {}
         self.templates = {}
@@ -56,11 +57,12 @@ class Template():
             if Template + f'{Colour_Mode}' not in self.templates:
                 self.templates[Template + f'{Colour_Mode}'] = cv2.imread(os.path.join(self.DIR,'template',Template) + '.png',Colour_Mode)
             template = self.templates[Template + f'{Colour_Mode}']
+            self.logg.info('read the template @{temp_name},size:{size}'.format(temp_name = Template,size = sys.getsizeof(template)))
             self.butt.tem_input(template,Template)
         else:
             template = Template
             self.butt.set_availabe()
-
+        
         if Image == '':
             if Colour_Mode == 0:
                 img = self.scsh.last_return()
@@ -88,5 +90,6 @@ class Template():
         else:
             result = self._match(img,template)
             self.last_result = self._location_calculate(result,Forward_Mode)
+        self.logg.info('template resut:{0}'.format(self.last_result))
         return self.last_result
     

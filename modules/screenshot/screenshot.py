@@ -1,4 +1,4 @@
-import time,os,cv2
+﻿import time,os,cv2
 
 from modules.dec_timer import average_timer,timer
 from modules.screenshot.pyautogui import Pyautogui
@@ -8,7 +8,9 @@ class Screenshot():
     def __init__(self,Config_Input):
         self.DIR = Config_Input['dir']
         self.config = Config_Input['config']
+        self.logg = Config_Input['logg'].log
 
+        self.shot_times = 0
         self.screenshots = {}
         self.last_time = time.time()
         self.gray_name = 0
@@ -22,6 +24,10 @@ class Screenshot():
     
     # @average_timer(t = 30)
     def get_screen(self,Mode = '',Interval = ''):
+        if self.shot_times > self.config['basic']['shot_threshold']:
+            # 等我把抛出异常研究明白再说
+            pass
+        
         if Mode == '':
             Mode = self.config['basic']["default_shot"]
         if Interval == '':
@@ -34,10 +40,11 @@ class Screenshot():
             self.arrange()
             time.sleep(0.1)
         
-        idcode = time.time()
-        self.screenshots[str(idcode)] = self.shot_API[Mode].shot()
-        self.last_time = idcode
-        return self.screenshots[str(idcode)]
+        self.last_time = time.time()
+        self.screenshots[str(self.last_time)] = self.shot_API[Mode].shot()
+        self.shot_times += 1
+        self.logg.info('img tag:{imgid},shot time:{shot_time}'.format(imgid = self.last_time,shot_time = self.shot_times))
+        return self.screenshots[str(self.last_time)]
     
     # @timer
     def arrange(self):

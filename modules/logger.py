@@ -47,15 +47,3 @@ class Logger():
         self.log.warning("这是一条警告日志")
         self.log.error("这是一条错误日志")
         return
-
-    def info(self,Message):
-        self.log.info(Message)
-        return
-
-    def warning(self,Message):
-        self.log.warning(Message)
-        return
-
-    def error(self,Message):
-        self.log.error(Message)
-        return

@@ -1,3 +1,4 @@
+# from logging import config
 import os,json,cv2
 
 class Button_Manager():
@@ -5,6 +6,7 @@ class Button_Manager():
     def __init__(self,Config_Input):
         self.DIR = Config_Input['dir']
         self.config = Config_Input['config']
+        self.logg = Config_Input['logg'].log
 
         self.available = False
         self.register_list = {}
@@ -23,6 +25,7 @@ class Button_Manager():
                 with open('{0}'.format(os.path.join(self.DIR,os.path.dirname(Name),'register_list.json')),mode = 'r',encoding = 'utf-8') as f:
                     self.register_list = json.load(f)
             self.enlarge_parameter = (tuple(self.register_list[Name]['expect']),self.register_list[Name]['zoom'])# 这里叫放大参数其实有点抽象
+            self.logg.info('template has been register:{exception}'.format(exception = self.enlarge_parameter))
         except FileNotFoundError:
             self.available = False
             return
