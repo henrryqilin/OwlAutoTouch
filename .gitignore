@@ -1,7 +1,7 @@
-.vs
-test.py
-/imgs/develop
-/imgs/ball*.png
-/examples
-/logs/9logs
-/logs/*.*
+﻿.vs
+*.pyc
+/DLCS/*
+log_*.txt
+!/DLCS/test/
+/modules/outdated
+/Lib/site-packages/
