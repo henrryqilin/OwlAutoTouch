@@ -1,7 +1,7 @@
 ﻿.vs
 *.pyc
 /DLCS/*
-test.py
 log_*.txt
+!/DLCS/test/
 /modules/outdated
-/Lib/site-packages
+/Lib/site-packages/
