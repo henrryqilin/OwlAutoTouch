@@ -1,4 +1,4 @@
-import cv2,os,sys
+﻿import cv2,os,sys
 
 from modules.dec_timer import average_timer,timer
 
@@ -11,7 +11,6 @@ class Template():
         self.butt = Config_Input['butt']
         self.logg = Config_Input['logg'].log
 
-        self.read_mode = {}
         self.templates = {}
         self.last_result = []
         return

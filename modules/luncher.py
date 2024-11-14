@@ -1,4 +1,4 @@
-import os,json
+﻿import os,json
 
 from modules.logger import Logger
 from modules.template import Template
@@ -10,10 +10,14 @@ class Luncher():
     def __init__(self,DLC_Name,Resource_Reference = {}):
         self.configs = {}
 
-        DIR = os.getcwd()
-        self.DIR = os.path.join(DIR,'DLCS',DLC_Name)
-        self.configs['dir'] = self.DIR
-        # print(os.listdir(self.DIR))
+        if ':' in DLC_Name:
+            self.DIR = DLC_Name
+            pass
+        else:
+            DIR = os.getcwd()
+            self.DIR = os.path.join(DIR,'DLCS',DLC_Name)
+            self.configs['dir'] = self.DIR
+        print(os.listdir(self.DIR))
 
         # load json
         try:
@@ -23,10 +27,16 @@ class Luncher():
             pass
         
         # system initialization
-        self.configs['logg'] = Logger(self.configs)
+        self.configs['logg'] = Logger(self.configs) 
+        self.logg = self.configs['logg']
+        self.logg.info('module log start')
         self.configs['butt'] = Button_Manager(self.configs)
+        self.logg.info('module butt start')
         self.configs['scsh'] = Screenshot(self.configs)
+        self.logg.info('module scsh start')
         self.configs['temp'] = Template(self.configs)
+        self.logg.info('module temp start')
+        self.logg.info('all modules start complete')
 
         return
     
