@@ -1,5 +1,6 @@
 ﻿.vs
 *.pyc
+!/pip
 /DLCS/*
 log_*.txt
 !/DLCS/test/

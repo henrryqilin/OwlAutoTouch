@@ -1,4 +1,4 @@
-import os,time,logging
+﻿import os,time,logging
 
 from rich.logging import RichHandler
 
@@ -10,6 +10,7 @@ class Logger():
         
         self.files_arrange()
         self.log = self.logger_init()
+        self.log_test()
         return
     
     def files_arrange(self):

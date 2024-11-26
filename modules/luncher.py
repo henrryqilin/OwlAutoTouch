@@ -21,14 +21,15 @@ class Luncher():
 
         # load json
         try:
-            with open(os.path.join(self.DIR,DLC_Name + '.json'),encoding = 'utf-8') as f:
-                self.config = self.configs['config'] = json.load(f)
-        except:
+            with open(os.path.join(self.DIR,DLC_Name + '.json'),encoding = 'utf-8-sig') as f:
+                self.configs['config'] = json.load(f)
+        except FileNotFoundError:
+            # 进行一个包合法检查
             pass
         
         # system initialization
         self.configs['logg'] = Logger(self.configs) 
-        self.logg = self.configs['logg']
+        self.logg = self.configs['logg'].log
         self.logg.info('module log start')
         self.configs['butt'] = Button_Manager(self.configs)
         self.logg.info('module butt start')

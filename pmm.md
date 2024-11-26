@@ -67,9 +67,9 @@
 
 ### template.py(v0.5.1)
  
- template文件中共有1个类:Templat
+ template文件中共有1个类:Template
  
- #### Templat
+ #### Template
 
 ```
 __init__(self,Config_Input):
@@ -87,14 +87,14 @@ __init__(self,Config_Input):
 ```
 _match(self,Image,Template):
 ```
- 该函数的目的是将模版匹配的核心功能与传参解析的功能解耦,<br>
+ 该函数的目的是将模版匹配的核心功能与传参解析的功能解耦<br>
  该函数内部使用的全部都是opencv函数
 
 ```
 _location_calculate(self,Result,Forward_Mode):
 ```
- 该函数的设计目的与match函数类似,这部主要是解析match的返回值<br>
- 如果还是将这部分塞入主程序则会过于臃肿<br>
+ 该函数的设计目的与match函数类似,如果还是将这部分塞入主程序则会过于臃肿<br>
+ 该函数主要是解析_match的返回值<br>
  内部主要分三种情况<br>
  1.匹配置信度不满足设置要求,返回false<br>
  2.置信度满足但为全屏匹配(button返回模版未注册)<br>
@@ -105,7 +105,7 @@ get_xy(self,Template,Image = '',Colour_Mode = 1,Forward_Mode = 0):
 ```
  该函数是目前Templat的主要功能函数<br>
  第一部分功能是模板储存内容过多时删除<br>
- 具体来讲就是模板名字加颜色代码最为key模板本身最为value<br>
+ 具体来讲就是模板名字加颜色代码最为key,模板本身最为value<br>
  可以参考上面初始化函数的介绍<br>
  第二部分是模板的导入目前简单分为注册模板导入和自由模板导入<br>
  其中注册模板为template文件夹及其子文件夹中出现并且在注册列表中有具体预期出现位置的模板<br>

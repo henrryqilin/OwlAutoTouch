@@ -1,4 +1,4 @@
-import cv2,pyautogui,time,os
+﻿import cv2,pyautogui,time,os
 # from paddleocr import PaddleOCR
 # from modules.dec_timer import timer
 
